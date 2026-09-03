@@ -67,22 +67,6 @@ export function nextInspectionId(): string {
   return `LM-${year}-${String(highest + 1).padStart(4, "0")}`;
 }
 
-/** Stable fingerprint of an image data URL, used to recognise a re-scan of the same photo. */
-export function imageFingerprint(dataUrl: string): string {
-  let h1 = 0x811c9dc5;
-  let h2 = 0x01000193;
-  for (let i = 0; i < dataUrl.length; i++) {
-    const c = dataUrl.charCodeAt(i);
-    h1 = ((h1 ^ c) * 16777619) >>> 0;
-    h2 = (h2 + c * (i + 1)) >>> 0;
-  }
-  return `${h1.toString(16)}${h2.toString(16)}-${dataUrl.length.toString(16)}`;
-}
-
-export function findByImageHash(hash: string): Inspection | undefined {
-  return loadInspections().find((i) => i.imageHash === hash);
-}
-
 export function loadOfficer(): Officer | null {
   if (!isBrowser()) return null;
   try {

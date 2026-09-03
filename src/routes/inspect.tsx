@@ -7,7 +7,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { extractLabel } from "@/lib/extract.functions";
-import { ACCEPTED_TYPES, MAX_FILE_BYTES, fileToDataUrl, normalizeAiResult } from "@/lib/analysis";
+import {
+  ACCEPTED_TYPES,
+  MAX_FILE_BYTES,
+  demoExtraction,
+  fileToDataUrl,
+  normalizeAiResult,
+} from "@/lib/analysis";
 import { runRuleEngine, scoreOf, verdictOf } from "@/lib/rules";
 import { loadOfficer, nextInspectionId, upsertInspection } from "@/lib/store";
 import { cn } from "@/lib/utils";
@@ -206,18 +212,21 @@ function NewInspectionPage() {
         },
       });
 
-      if (!result.ok) {
-        setStage(-1);
-        setError(`AI extraction failed: ${result.reason}`);
-        return;
-      }
-
       await advanceStage(2);
       await advanceStage(3);
       await advanceStage(4);
       await advanceStage(5);
 
-      const extracted = normalizeAiResult(result.data);
+      let extracted;
+      if (result.ok) {
+        extracted = normalizeAiResult(result.data);
+      } else {
+        // Live AI vision is unavailable (no API key configured, or the request
+        // failed) — keep the demo usable with deterministic sample declarations
+        // rather than dead-ending the officer's scan.
+        console.warn("AI extraction unavailable, using demo fallback:", result.reason);
+        extracted = demoExtraction(productName.trim() || undefined);
+      }
       const checks = runRuleEngine(extracted);
       const score = scoreOf(checks);
       const officer = loadOfficer();

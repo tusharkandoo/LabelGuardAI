@@ -52,7 +52,7 @@ export function AppShell({
       <div className="flex min-h-[calc(100vh-4px)]">
         <aside
           className={cn(
-            "fixed inset-y-0 left-0 z-40 w-64 shrink-0 flex-col bg-sidebar text-sidebar-foreground transition-transform lg:static lg:flex lg:translate-x-0",
+            "no-print fixed inset-y-0 left-0 z-40 w-64 shrink-0 flex-col bg-sidebar text-sidebar-foreground transition-transform lg:static lg:flex lg:translate-x-0",
             open ? "flex translate-x-0" : "hidden -translate-x-full lg:flex",
           )}
         >
@@ -98,7 +98,7 @@ export function AppShell({
         </aside>
 
         <div className="flex min-w-0 flex-1 flex-col">
-          <header className="sticky top-0 z-30 border-b border-border bg-card/95 backdrop-blur">
+          <header className="no-print sticky top-0 z-30 border-b border-border bg-card/95 backdrop-blur">
             <div className="flex items-center gap-3 px-4 py-3 sm:px-6">
               <button
                 className="lg:hidden"
@@ -135,7 +135,7 @@ export function AppShell({
 
           <main className="flex-1 px-4 py-6 sm:px-6">{children}</main>
 
-          <footer className="border-t border-border px-4 py-4 text-[11px] text-muted-foreground sm:px-6">
+          <footer className="no-print border-t border-border px-4 py-4 text-[11px] text-muted-foreground sm:px-6">
             LabelGuard AI produces AI-assisted preliminary assessments under the Legal Metrology
             (Packaged Commodities) Rules, 2011. Findings are not legally determinative and require
             officer verification.
